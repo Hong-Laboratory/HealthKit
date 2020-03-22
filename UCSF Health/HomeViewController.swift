@@ -11,18 +11,17 @@ import UIKit
 class HomeViewController: UIViewController {
     
     var health: Health!
-    
-    var steps: [Date : Double]!
+    var healthData: HealthData!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         health = Health()
         
-        health.getSteps { response in
+        health.getData { response in
             switch response {
-            case .success(let steps):
-                self.steps = steps
+            case .success(let healthData):
+                self.healthData = healthData
             case .failure(let error):
                 print(error)
             }

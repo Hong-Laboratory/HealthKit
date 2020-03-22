@@ -15,11 +15,14 @@ class Health {
     
     init() {
         healthStore = HKHealthStore()
-        
         requestAuthorization()
     }
     
-    public func getSteps(completion: @escaping(Result<[Date : Double], Error>) -> Void) {
+    public func getData(completion: @escaping(Result<HealthData, Error>) -> Void) {
+        
+    }
+    
+    private func getSteps(completion: @escaping(Result<[Step], Error>) -> Void) {
         let today = Date()
         let startDate = Calendar.current.date(byAdding: .day, value: -30, to: today)!
         
@@ -40,18 +43,25 @@ class Health {
                 return
             }
             
-            var stepsCollection: [Date : Double] = [:]
+            var steps: [Step] = []
             stepSamples.enumerateStatistics(from: startDate, to: today) { statistics, error in
                 if let dailySteps = statistics.sumQuantity() {
-                    let steps = dailySteps.doubleValue(for: .count())
-                    stepsCollection[statistics.startDate] = steps
+                    let date = statistics.startDate
+                    let stepCount = dailySteps.doubleValue(for: .count())
+                    let step = Step(date, stepCount)
+                    
+                    steps.append(step)
                 }
             }
             
-            completion(.success(stepsCollection))
+            completion(.success(steps))
         }
         
         healthStore.execute(stepsQuery)
+    }
+    
+    private func getDistance(completion: @escaping(Result<[Date: Double], Error>) -> Void) {
+        
     }
     
     private func requestAuthorization() {
