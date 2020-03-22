@@ -140,7 +140,41 @@ class Health {
     }
     
     private func getFlights(completion: @escaping(Result<[Flight], Error>) -> Void) {
+        let today = Date()
+        let startDate = Calendar.current.date(byAdding: .day, value: -30, to: today)!
         
+        var interval = DateComponents()
+        interval.day = 1
+        
+        var anchorComponents = Calendar.current.dateComponents([.day, .month, .year], from: today)
+        anchorComponents.hour = 0
+        
+        let anchorDate = Calendar.current.date(from: anchorComponents)!
+        
+        guard let flights = HKSampleType.quantityType(forIdentifier: .flightsClimbed) else { fatalError() }
+        let flightsQuery = HKStatisticsCollectionQuery(quantityType: flights, quantitySamplePredicate: nil, options: [.cumulativeSum], anchorDate: anchorDate, intervalComponents: interval)
+        
+        flightsQuery.initialResultsHandler = { query, results, error in
+            guard let flightSample = results else {
+                completion(.failure(error!))
+                return
+            }
+            
+            var flights: [Flight] = []
+            flightSample.enumerateStatistics(from: startDate, to: today) { statistics, error in
+                if let dailyFlight = statistics.sumQuantity() {
+                    let date = statistics.startDate
+                    let count = dailyFlight.doubleValue(for: .mile())
+                    let flight = Flight(date, count)
+                    
+                    flights.append(flight)
+                }
+            }
+            
+            completion(.success(flights))
+        }
+        
+        healthStore.execute(flightsQuery)
     }
     
     private func requestAuthorization() {
