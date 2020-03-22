@@ -164,7 +164,7 @@ class Health {
             flightSample.enumerateStatistics(from: startDate, to: today) { statistics, error in
                 if let dailyFlight = statistics.sumQuantity() {
                     let date = statistics.startDate
-                    let count = dailyFlight.doubleValue(for: .mile())
+                    let count = dailyFlight.doubleValue(for: .count())
                     let flight = Flight(date, count)
                     
                     flights.append(flight)
