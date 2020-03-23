@@ -180,7 +180,7 @@ class Health {
     private func requestAuthorization() {
         let allTypes = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!, HKObjectType.quantityType(forIdentifier: .flightsClimbed)!])
 
-        healthStore.requestAuthorization(toShare: allTypes, read: allTypes) { (success, error) in
+        healthStore.requestAuthorization(toShare: nil, read: allTypes) { (success, error) in
             if !success {
                 print(error!)
             }

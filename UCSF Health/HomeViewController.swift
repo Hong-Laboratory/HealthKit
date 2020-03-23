@@ -36,7 +36,7 @@ class HomeViewController: UIViewController {
         }
         
         print("\nDistances")
-        for distance in healthData.distance {
+        for distance in healthData.distances {
             print("\(distance.date) ----- \(distance.length)")
         }
         

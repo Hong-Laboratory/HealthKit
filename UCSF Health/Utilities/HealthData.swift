@@ -10,12 +10,12 @@ import Foundation
 
 struct HealthData {
     public var steps: [Step]
-    public var distance: [Distance]
+    public var distances: [Distance]
     public var flights: [Flight]
     
-    init(_ steps: [Step], _ distance: [Distance], _ flights: [Flight]) {
+    init(_ steps: [Step], _ distances: [Distance], _ flights: [Flight]) {
         self.steps = steps
-        self.distance = distance
+        self.distances = distances
         self.flights = flights
     }
 }
