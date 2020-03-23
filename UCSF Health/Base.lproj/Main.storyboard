@@ -8,20 +8,33 @@
     </dependencies>
     <scenes>
         <!--Today-->
-        <scene sceneID="hNz-n2-bh7">
+        <scene sceneID="Hpp-6j-3zc">
             <objects>
-                <viewController id="9pv-A4-QxB" customClass="HomeViewController" customModule="UCSF_Health" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="tsR-hK-woN">
+                <tableViewController id="GBn-st-ray" customClass="TodayTableViewController" customModule="UCSF_Health" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Hak-ns-A2i">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Today" id="Woc-Ix-NrO"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="a76-hf-61x">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="a76-hf-61x" id="ysM-Ig-BQ7">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="GBn-st-ray" id="Eck-MI-pHQ"/>
+                            <outlet property="delegate" destination="GBn-st-ray" id="2OL-e4-H40"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Today" id="c1O-Vb-dUs"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qjk-lc-vg5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1707" y="-323"/>
+            <point key="canvasLocation" x="1706" y="-323"/>
         </scene>
         <!--History-->
         <scene sceneID="itI-Na-Fb3">
@@ -69,7 +82,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="9pv-A4-QxB" kind="relationship" relationship="rootViewController" id="Y02-Hj-aYb"/>
+                        <segue destination="GBn-st-ray" kind="relationship" relationship="rootViewController" id="BkW-0E-tjh"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bAt-cf-IT4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

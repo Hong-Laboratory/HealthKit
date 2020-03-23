@@ -15,10 +15,9 @@ class Health {
     
     init() {
         healthStore = HKHealthStore()
-        requestAuthorization()
     }
     
-    public func getData(completion: @escaping(Result<HealthData, Error>) -> Void) {
+    public func getData(days: Int, completion: @escaping(Result<HealthData, Error>) -> Void) {
         var steps: [Step]!
         var distances: [Distance]!
         var flights: [Flight]!
@@ -26,7 +25,7 @@ class Health {
         let myGroup = DispatchGroup()
         
         myGroup.enter()
-        getSteps() { response in
+        getSteps(days) { response in
             switch response {
             case .success(let stepsResult):
                 steps = stepsResult
@@ -37,7 +36,7 @@ class Health {
         }
         
         myGroup.enter()
-        getDistances() { response in
+        getDistances(days) { response in
             switch response {
             case .success(let distancesResult):
                 distances = distancesResult
@@ -48,7 +47,7 @@ class Health {
         }
         
         myGroup.enter()
-        getFlights() { response in
+        getFlights(days) { response in
             switch response {
             case .success(let flightsResult):
                 flights = flightsResult
@@ -63,9 +62,9 @@ class Health {
         }
     }
     
-    private func getSteps(completion: @escaping(Result<[Step], Error>) -> Void) {
+    private func getSteps(_ days: Int, completion: @escaping(Result<[Step], Error>) -> Void) {
         let today = Date()
-        let startDate = Calendar.current.date(byAdding: .day, value: -30, to: today)!
+        let startDate = Calendar.current.date(byAdding: .day, value: -days, to: today)!
         
         var interval = DateComponents()
         interval.day = 1
@@ -101,9 +100,9 @@ class Health {
         healthStore.execute(stepsQuery)
     }
     
-    private func getDistances(completion: @escaping(Result<[Distance], Error>) -> Void) {
+    private func getDistances(_ days: Int, completion: @escaping(Result<[Distance], Error>) -> Void) {
         let today = Date()
-        let startDate = Calendar.current.date(byAdding: .day, value: -30, to: today)!
+        let startDate = Calendar.current.date(byAdding: .day, value: -days, to: today)!
         
         var interval = DateComponents()
         interval.day = 1
@@ -139,9 +138,9 @@ class Health {
         healthStore.execute(distancesQuery)
     }
     
-    private func getFlights(completion: @escaping(Result<[Flight], Error>) -> Void) {
+    private func getFlights(_ days: Int, completion: @escaping(Result<[Flight], Error>) -> Void) {
         let today = Date()
-        let startDate = Calendar.current.date(byAdding: .day, value: -30, to: today)!
+        let startDate = Calendar.current.date(byAdding: .day, value: -days, to: today)!
         
         var interval = DateComponents()
         interval.day = 1
@@ -177,10 +176,10 @@ class Health {
         healthStore.execute(flightsQuery)
     }
     
-    private func requestAuthorization() {
+    public static func requestAuthorization() {
         let allTypes = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!, HKObjectType.quantityType(forIdentifier: .flightsClimbed)!])
 
-        healthStore.requestAuthorization(toShare: nil, read: allTypes) { (success, error) in
+        HKHealthStore().requestAuthorization(toShare: nil, read: allTypes) { (success, error) in
             if !success {
                 print(error!)
             }
