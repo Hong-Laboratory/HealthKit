@@ -19,6 +19,8 @@ class TodayTableViewController: UITableViewController {
     
     var health: Health!
     var healthData: HealthData!
+    
+    var availableHealthData: [HealthMetric]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +35,7 @@ class TodayTableViewController: UITableViewController {
             switch response {
             case .success(let healthData):
                 self.healthData = healthData
-                self.tableView.reloadData()
+                self.parseHealthData()
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -43,13 +45,31 @@ class TodayTableViewController: UITableViewController {
     func setupTableView() {
         tableView.allowsSelection = false
     }
+    
+    func parseHealthData() {
+        availableHealthData = []
+        
+        if let distance = healthData.distances.first {
+            availableHealthData.append(distance)
+        }
+        
+        if let flight = healthData.flights.first {
+            availableHealthData.append(flight)
+        }
+        
+        if let step = healthData.steps.first {
+            availableHealthData.append(step)
+        }
+        
+        tableView.reloadData()
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return healthData != nil ? 3 : 0
+        return availableHealthData != nil ? availableHealthData.count : 0
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -64,44 +84,13 @@ class TodayTableViewController: UITableViewController {
         let dateString = dateFormatter.string(from: Date()).lowercased()
         
         cell.background.layer.cornerRadius = 15
-
-        switch indexPath.row {
-        case 0:
-            // Distance
-            if let distance = healthData.distances.first {
-                cell.icon.image = distance.icon
-                cell.title.text = distance.title
-                cell.background.backgroundColor = distance.color
-                cell.details.text = "\(dateString) – \(distance.length.rounded(toPlaces: 1)) mi"
-            } else {
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            
-        case 1:
-            // Flights
-            if let flight = healthData.flights.first {
-                cell.icon.image = flight.icon
-                cell.title.text = flight.title
-                cell.background.backgroundColor = flight.color
-                cell.details.text = "\(dateString) – \(Int(flight.count)) flts"
-            } else {
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            
-        case 2:
-            // Steps
-            if let step = healthData.steps.first {
-                cell.icon.image = step.icon
-                cell.title.text = step.title
-                cell.background.backgroundColor = step.color
-                cell.details.text = "\(dateString) – \(Int(step.count)) stps"
-            } else {
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            
-        default:
-            break
-        }
+        
+        let metric = availableHealthData[indexPath.row]
+        
+        cell.icon.image = metric.icon
+        cell.title.text = metric.title
+        cell.background.backgroundColor = metric.color
+        cell.details.text = "\(dateString) – \(metric.value.rounded(toPlaces: 1)) \(metric.units)"
 
         return cell
     }
