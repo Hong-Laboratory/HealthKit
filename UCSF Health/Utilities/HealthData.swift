@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct HealthData {
     public var steps: [Step]
@@ -34,13 +35,11 @@ class HealthCount: HealthMetric {
     }
 }
 
-class Step: HealthCount {
-    override init(_ date: Date, _ count: Double) {
-        super.init(date, count)
-    }
-}
-
 class Distance: HealthMetric {
+    let title = "Distance"
+    let icon = UIImage(named: "Distance")!
+    let color = UIColor.red
+    
     public var date: Date
     public var length: Double
     
@@ -51,6 +50,20 @@ class Distance: HealthMetric {
 }
 
 class Flight: HealthCount {
+    let title = "Flights"
+    let icon = UIImage(named: "Flight")!
+    let color = UIColor.green
+    
+    override init(_ date: Date, _ count: Double) {
+        super.init(date, count)
+    }
+}
+
+class Step: HealthCount {
+    let title = "Steps"
+    let icon = UIImage(named: "Step")!
+    let color = UIColor.blue
+    
     override init(_ date: Date, _ count: Double) {
         super.init(date, count)
     }

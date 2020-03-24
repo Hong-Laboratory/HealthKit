@@ -15,6 +15,7 @@
 		CA0502EE2417637300587B0A /* Health.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0502ED2417637300587B0A /* Health.swift */; };
 		CA0502F22417683000587B0A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA0502F12417683000587B0A /* HealthKit.framework */; };
 		CA2331762429567F00D8F6B5 /* TodayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2331752429567F00D8F6B5 /* TodayTableViewController.swift */; };
+		CA2331792429C9C900D8F6B5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2331782429C9C900D8F6B5 /* Extensions.swift */; };
 		CA245CA124272BB80028C91B /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA245CA024272BB80028C91B /* HealthData.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		CA0502EF2417683000587B0A /* UCSF Health.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "UCSF Health.entitlements"; sourceTree = "<group>"; };
 		CA0502F12417683000587B0A /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		CA2331752429567F00D8F6B5 /* TodayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTableViewController.swift; sourceTree = "<group>"; };
+		CA2331782429C9C900D8F6B5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CA245CA024272BB80028C91B /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +101,7 @@
 			children = (
 				CA0502ED2417637300587B0A /* Health.swift */,
 				CA245CA024272BB80028C91B /* HealthData.swift */,
+				CA2331782429C9C900D8F6B5 /* Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -175,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA245CA124272BB80028C91B /* HealthData.swift in Sources */,
+				CA2331792429C9C900D8F6B5 /* Extensions.swift in Sources */,
 				CA0502D82417630D00587B0A /* AppDelegate.swift in Sources */,
 				CA0502EE2417637300587B0A /* Health.swift in Sources */,
 				CA0502DA2417630D00587B0A /* SceneDelegate.swift in Sources */,
