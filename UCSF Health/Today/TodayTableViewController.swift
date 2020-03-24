@@ -60,9 +60,10 @@ class TodayTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "todayHealthData", for: indexPath) as! TodayTableViewCell
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "H:mm a"
+        dateFormatter.dateFormat = "h:mm a"
+        let dateString = dateFormatter.string(from: Date()).lowercased()
         
-        cell.background.layer.cornerRadius = 10
+        cell.background.layer.cornerRadius = 15
 
         switch indexPath.row {
         case 0:
@@ -71,7 +72,7 @@ class TodayTableViewController: UITableViewController {
                 cell.icon.image = distance.icon
                 cell.title.text = distance.title
                 cell.background.backgroundColor = distance.color
-                cell.details.text = "\(dateFormatter.string(from: distance.date).lowercased()) – \(distance.length.rounded(toPlaces: 1)) mi"
+                cell.details.text = "\(dateString) – \(distance.length.rounded(toPlaces: 1)) mi"
             } else {
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
@@ -82,7 +83,7 @@ class TodayTableViewController: UITableViewController {
                 cell.icon.image = flight.icon
                 cell.title.text = flight.title
                 cell.background.backgroundColor = flight.color
-                cell.details.text = "\(dateFormatter.string(from: flight.date).lowercased()) – \(Int(flight.count))"
+                cell.details.text = "\(dateString) – \(Int(flight.count)) flts"
             } else {
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
@@ -93,7 +94,7 @@ class TodayTableViewController: UITableViewController {
                 cell.icon.image = step.icon
                 cell.title.text = step.title
                 cell.background.backgroundColor = step.color
-                cell.details.text = "\(dateFormatter.string(from: step.date).lowercased()) – \(Int(step.count))"
+                cell.details.text = "\(dateString) – \(Int(step.count)) stps"
             } else {
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             }
