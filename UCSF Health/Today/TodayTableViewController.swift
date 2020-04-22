@@ -29,7 +29,7 @@ class TodayTableViewController: UITableViewController {
     }
     
     func getHealthData() {
-        HealthData.health.getData(days: 1) { response in
+        HealthData.health.getData(1) { response in
             switch response {
             case .success(let healthData):
                 self.healthData = healthData
@@ -47,15 +47,15 @@ class TodayTableViewController: UITableViewController {
     func parseHealthData() {
         availableHealthData = []
         
-        if let distance = healthData.distances.first {
+        if let distance = healthData.distances.last {
             availableHealthData.append(distance)
         }
         
-        if let flight = healthData.flights.first {
+        if let flight = healthData.flights.last {
             availableHealthData.append(flight)
         }
         
-        if let step = healthData.steps.first {
+        if let step = healthData.steps.last {
             availableHealthData.append(step)
         }
         

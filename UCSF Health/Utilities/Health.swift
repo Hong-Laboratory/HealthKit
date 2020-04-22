@@ -12,12 +12,17 @@ import HealthKit
 class Health {
     
     private let healthStore: HKHealthStore
+    private let healthTypeObjects: Set<HKObjectType>
+    private let healthTypeSamples: Set<HKSampleType>
     
     init() {
         healthStore = HKHealthStore()
+        
+        healthTypeObjects = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!, HKObjectType.quantityType(forIdentifier: .flightsClimbed)!])
+        healthTypeSamples = Set([HKSampleType.quantityType(forIdentifier: .stepCount)!, HKSampleType.quantityType(forIdentifier: .distanceWalkingRunning)!, HKObjectType.quantityType(forIdentifier: .flightsClimbed)!])
     }
     
-    public func getData(days: Int, completion: @escaping(Result<HealthData, Error>) -> Void) {
+    public func getData(_ days: Int, completion: @escaping(Result<HealthData, Error>) -> Void) {
         var steps: [Step]!
         var distances: [Distance]!
         var flights: [Flight]!
@@ -176,42 +181,41 @@ class Health {
         healthStore.execute(flightsQuery)
     }
     
-    public func getBackgroundSteps() {
-        guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
-            fatalError("Unable to get the step count type.")
-        }
-        
-        let query = HKObserverQuery(sampleType: stepCountType, predicate: nil) { (query, completionHandler, error) in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-            
-            self.getSteps(1) { response in
-                switch response {
-                case .success(let steps):
-                    guard let step = steps.first else { print("No step."); return }
-                    print(step.value)
-                case .failure(let error):
+    public func getBackgroundUpdates() {
+        for healthType in healthTypeSamples {
+            let query = HKObserverQuery(sampleType: healthType, predicate: nil) { (query, completionHandler, error) in
+                if let error = error {
                     print(error.localizedDescription)
                 }
+                
+                self.getData(1) { response in
+                    switch response {
+                    case .success(let healthData):
+                        let step = healthData.steps.last
+                        let distance = healthData.distances.last
+                        let flight = healthData.flights.last
+                        
+                        print("\(step?.value ?? 0) steps, \(distance?.value ?? 0) mi, \(flight?.value ?? 0) floors")
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                }
+                
+                completionHandler()
             }
             
-            //completionHandler()
-        }
-        
-        healthStore.execute(query)
-        
-        healthStore.enableBackgroundDelivery(for: stepCountType, frequency: .immediate) { (success, error) in
-            if let error = error {
-                print(error.localizedDescription)
+            healthStore.execute(query)
+            
+            healthStore.enableBackgroundDelivery(for: healthType, frequency: .immediate) { (success, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
             }
         }
     }
     
-    public static func requestAuthorization() {
-        let allTypes = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!, HKObjectType.quantityType(forIdentifier: .flightsClimbed)!])
-
-        HKHealthStore().requestAuthorization(toShare: nil, read: allTypes) { (success, error) in
+    public func requestAuthorization() {
+        HKHealthStore().requestAuthorization(toShare: nil, read: healthTypeObjects) { (success, error) in
             if !success {
                 print(error!)
             }

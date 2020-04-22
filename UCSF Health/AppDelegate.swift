@@ -15,8 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         HealthData.health = Health()
-        Health.requestAuthorization()
-        HealthData.health.getBackgroundSteps()
+        
+        HealthData.health.requestAuthorization()
+        HealthData.health.getBackgroundUpdates()
         
         return true
     }
