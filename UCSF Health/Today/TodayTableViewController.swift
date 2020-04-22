@@ -17,7 +17,6 @@ class TodayTableViewCell: UITableViewCell {
 
 class TodayTableViewController: UITableViewController {
     
-    var health: Health!
     var healthData: HealthData!
     
     var availableHealthData: [HealthMetric]!
@@ -25,13 +24,12 @@ class TodayTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        health = Health()
         getHealthData()
         setupTableView()
     }
     
     func getHealthData() {
-        health.getData(days: 1) { response in
+        HealthData.health.getData(days: 1) { response in
             switch response {
             case .success(let healthData):
                 self.healthData = healthData

@@ -176,6 +176,38 @@ class Health {
         healthStore.execute(flightsQuery)
     }
     
+    public func getBackgroundSteps() {
+        guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+            fatalError("Unable to get the step count type.")
+        }
+        
+        let query = HKObserverQuery(sampleType: stepCountType, predicate: nil) { (query, completionHandler, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            self.getSteps(1) { response in
+                switch response {
+                case .success(let steps):
+                    guard let step = steps.first else { print("No step."); return }
+                    print(step.value)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            
+            //completionHandler()
+        }
+        
+        healthStore.execute(query)
+        
+        healthStore.enableBackgroundDelivery(for: stepCountType, frequency: .immediate) { (success, error) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     public static func requestAuthorization() {
         let allTypes = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!, HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)!, HKObjectType.quantityType(forIdentifier: .flightsClimbed)!])
 

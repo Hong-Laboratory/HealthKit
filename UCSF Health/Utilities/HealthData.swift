@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 struct HealthData {
+    static var health: Health!
+    
     public var steps: [Step]
     public var distances: [Distance]
     public var flights: [Flight]
@@ -20,7 +22,6 @@ struct HealthData {
         self.flights = flights
     }
 }
-
 
 protocol HealthMetric {
     var title: String { get }
